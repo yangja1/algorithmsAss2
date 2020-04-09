@@ -1,0 +1,276 @@
+/*I wasn't originally going to use git, but now that assignments are worth so much I've decided to use it.
+So as a result I have already pretty much finished everything, and now am just copying onto here.*/
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+//
+/*
+
+  	(Question) You need to solve the above problem using two different shortest path algorithms 
+  	and discuss the differences between their implementation and performance. 
+ 	
+ 	I lost 100 marks last time for forgetting to answer the question last time.
+ 	This time I'm going to try give as much information as possible, so I dont lose
+ 	that many marks, so sorry in advance if I am long winded.
+ 	
+ 	To tackle this problem I used 2D arrays. I find 2D arrays to be relatively easy to use 
+ 	especially when compared to priority queues.
+	
+	The Dijkstra Algorithm finds the shortest path from one source node, by going from 
+    point to point. When using the arrays Dijkstra would run in O(V^2). The Dijkstra Algorithm is 
+    a continuous algorithm, making it better for sparser graphs as it goes through point by point.
+    As a result it has a better runtime for repeated actions.
+      
+    The Floyd-Warshall Algorithm finds the shorter path by searching through pairs
+    of vertices. As a result of searching through pairs, the Floyd-Warshall Algorithm is much 
+    more exhaustive than the Dijkstra Algorithm. This means it suits denser graphs better. 
+    The Floyd-Warshall algorithm runs in O(V^3) which is slower. However while it may be slower, 
+    it is more suitable for this problem. This is because we are looking 
+    for the longest route between any two vertices that allows us to calculate 
+    the time needed for the competition.
+
+ */
+public class CompetitionTests {
+
+	@Test
+    public void testDijkstraConstructor() {
+    	
+    	CompetitionDijkstra map;
+    	String filename = "tinyEWD.txt"; //can be changed to any file name manually
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	map = new CompetitionDijkstra(filename, sA, sB, sC);
+    	assertEquals(38, map.timeRequiredforCompetition());
+    }
+
+    @Test
+    public void testFWConstructor() {
+    	CompetitionFloydWarshall map;
+    	String filename = "tinyEWD.txt"; //same as above, can be changed to any file name manually
+    	int sA = 50;
+    	int sB = 80;
+    	int sC = 60;
+    	map = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    	assertEquals(38, map.timeRequiredforCompetition());
+    }
+
+    @Test
+    public void testDijkstraFilenameError()
+    {
+    	CompetitionDijkstra map;
+    	String filename = "bfidbc.txt"; //mistyped file name
+    	int sA = 50;
+    	int sB = 80;
+    	int sC = 60;
+    	map = new CompetitionDijkstra(filename, sA, sB, sC);
+    	assertEquals(-1, map.timeRequiredforCompetition());
+    }
+    
+    @Test
+    public void testFWFilenameError()
+    {
+    	CompetitionFloydWarshall map;
+    	String filename = "bfidbc.txt"; //mistyped file name same as above
+    	int sA = 50;
+    	int sB = 80;
+    	int sC = 60;
+    	map = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    	assertEquals(-1, map.timeRequiredforCompetition());
+    }
+    
+    @Test
+    public void testDijkstraNegativeSpeed() //check if any speeds are negative
+    {
+    	CompetitionDijkstra map;
+    	String filename = "tinyEWD.txt";
+    	int sA = 0;
+    	int sB = 80;
+    	int sC = 60;
+    	map = new CompetitionDijkstra(filename, sA, sB, sC);
+    	assertEquals(-1, map.timeRequiredforCompetition());
+    	sA = -1;
+    	sB = 0;
+    	sC = -2;
+    	map = new CompetitionDijkstra(filename, sA, sB, sC);
+    	assertEquals(-1, map.timeRequiredforCompetition());
+    }
+    
+    @Test
+    public void testFWNegativeSpeed()//check if any speeds are negative
+    {
+    	CompetitionFloydWarshall map;
+    	String filename = "tinyEWD.txt";
+    	int sA = 0;
+    	int sB = 80;
+    	int sC = 60;
+    	map = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    	assertEquals(-1, map.timeRequiredforCompetition());
+    	sA = -1;
+    	sB = 0;
+    	sC = -2;
+    	map = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    	assertEquals(-1, map.timeRequiredforCompetition());
+    }
+    
+    @Test
+    public void testInputA() //this can be changed manually to testInputB(), testInputC() etc.
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-A.txt"; //filename should be changed accordingly
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    	assertEquals(-1, mapD.timeRequiredforCompetition());
+    	assertEquals(-1, mapFW.timeRequiredforCompetition());
+    }
+    @Test
+    public void testInputB()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-B.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    	assertEquals(10000, mapD.timeRequiredforCompetition());
+    	assertEquals(10000, mapFW.timeRequiredforCompetition());
+    }
+    
+    @Test
+    public void testInputC()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-C.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+    
+    @Test
+    public void testInputD()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-D.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+    
+    @Test
+    public void testInputF()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-F.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+    
+    @Test
+    public void testInputG()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-G.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+ 
+    @Test
+    public void testInputI()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-I.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+    
+    @Test
+    public void testInputJ()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-J.txt";
+    	int sA = 10;
+    	int sB = 20;
+    	int sC = 15;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    	assertEquals(-1, mapD.timeRequiredforCompetition());
+    	assertEquals(-1, mapFW.timeRequiredforCompetition());
+    }
+    
+    @Test
+    public void testInputK()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-K.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+    
+    @Test
+    public void testInputL()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-L.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+    
+    @Test
+    public void testInputM()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-M.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+    
+    @Test
+    public void testInputN()
+    {
+    	CompetitionDijkstra mapD;
+    	CompetitionFloydWarshall mapFW;
+    	String filename = "input-N.txt";
+    	int sA = 60;
+    	int sB = 80;
+    	int sC = 50;
+    	mapD = new CompetitionDijkstra(filename, sA, sB, sC);
+    	mapFW = new CompetitionFloydWarshall(filename, sA, sB, sC);
+    }
+}
